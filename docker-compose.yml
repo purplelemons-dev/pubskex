@@ -1,0 +1,7 @@
+
+services:
+  pubskex:
+    build: 
+      context: src
+      dockerfile: Dockerfile
+      
