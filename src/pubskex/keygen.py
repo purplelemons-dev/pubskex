@@ -20,10 +20,7 @@ def dearmor_private_key(armor: str):
             hex(q)[2:].encode(),
         ]
     )
-    print(reconstructed)
-    hashed_armor = sha256(reconstructed.replace(b"\n", b"")).hexdigest()
-    if armor[6] != hashed_armor:
-        raise ValueError("Invalid armor hash")
+    # print(reconstructed)
     return PrivateKey(n, e, d, p, q)
 
 
@@ -34,10 +31,7 @@ def dearmor_public_key(armor: str):
     n = int(armor[idx + 1], 16)
     e = int(armor[idx + 2], 16)
     reconstructed = b"\n".join([hex(n)[2:].encode(), hex(e)[2:].encode()])
-    print(reconstructed)
-    hashed_armor = sha256(reconstructed.replace(b"\n", b"")).hexdigest()
-    if armor[3] != hashed_armor:
-        raise ValueError("Invalid armor hash")
+    # print(reconstructed)
     return PublicKey(n, e)
 
 
@@ -52,8 +46,6 @@ def armor_private_key(key: PrivateKey):
     bytes_q = hex(q)[2:].encode()
     key_armor = b"\n".join([bytes_n, bytes_e, bytes_d, bytes_p, bytes_q])
     armor += key_armor.decode()
-    hashed_armor = sha256(key_armor.replace(b"\n", b"")).hexdigest()
-    armor += f"\n{hashed_armor}"
     armor += "\n</private-key>\n</pubskex>"
     return armor
 
@@ -65,8 +57,6 @@ def armor_public_key(key: PublicKey):
     bytes_e = hex(e)[2:].encode()
     key_armor = b"\n".join([bytes_n, bytes_e])
     armor += key_armor.decode()
-    hashed_armor = sha256(key_armor.replace(b"\n", b"")).hexdigest()
-    armor += f"\n{hashed_armor}"
     armor += "\n</public-key>\n</pubskex>"
     return armor
 
